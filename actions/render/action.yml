@@ -37,7 +37,9 @@ runs:
     - id: checkout
       shell: bash
       run: |
+        echo "::group::Checkout"
         git clone --depth 1 ${{ inputs.repository_url }} -b ${{ env.source_branch }} t3docsproject
+        echo "::endgroup::"
 
     - id: jobfile
       working-directory: t3docsproject
@@ -61,7 +63,7 @@ runs:
       shell: bash
       working-directory: t3docsproject
       run: |
-        ls -latr
+        echo "::group::Rendering"
         mkdir -p RenderedDocumentation
         docker run --rm --user=$(id -u):$(id -g) \
           -v $(pwd):/PROJECT:ro \
@@ -69,12 +71,13 @@ runs:
           t3docs/render-documentation makehtml \
             -c make_singlehtml 1 \
             -c "/ALL/Menu/mainmenu.sh makehtml -c replace_static_in_html 1 -c make_singlehtml 1 -c jobfile /PROJECT/jobfile.json"
-
+        echo "::endgroup::"
 
     - id: langhandling
       shell: bash
       working-directory: t3docsproject
       run: |
+        echo "::group::Prepare final structure"
         # test if rendering failed for whatever reason
         ls RenderedDocumentation/Result || exit 1
 
@@ -102,6 +105,7 @@ runs:
                     rmdir ${LOCALIZATIONDIR}
             done
         fi
+        echo "::endgroup::"
 
     - id: output
       shell: bash

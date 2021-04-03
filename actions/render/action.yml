@@ -26,10 +26,11 @@ runs:
         git clone --depth 1 ${{ inputs.repository_url }} -b ${{ inputs.source_branch }} t3docsproject
 
     - id: jobfile
+      working-directory: t3docsproject
       shell: bash
       run: |
-        touch t3docsproject/jobfile.json
-        cat << EOF > t3docsproject/jobfile.json
+        touch jobfile.json
+        cat << EOF > jobfile.json
         {
             "Overrides_cfg": {
                 "general": {
@@ -44,11 +45,13 @@ runs:
 
     - id: render
       shell: bash
+      working-directory: t3docsproject
       run: |
-        mkdir -p t3docsproject/RenderedDocumentation
+        ls -latr
+        mkdir -p RenderedDocumentation
         docker run --rm --user=$(id -u):$(id -g) \
-          -v $(pwd)/t3docsproject:/project:ro \
-          -v $(pwd)/t3docsproject/RenderedDocumentation:/RESULT \
+          -v $(pwd):/project:ro \
+          -v $(pwd)/RenderedDocumentation:/RESULT \
           t3docs/render-documentation makehtml \
             -c make_singlehtml 1 \
             -c "/ALL/Menu/mainmenu.sh makehtml -c replace_static_in_html 1 -c make_singlehtml 1 -c jobfile /project/jobfile.json"
@@ -74,8 +77,8 @@ runs:
         fi
 
         # now see if other localization versions have been rendered. if so, move them to FinalDocumentation/, too
-        if [ "$(ls -A RenderedDocumentation/Result/t3docsproject/)" ]; then
-            for LOCALIZATIONDIR in RenderedDocumentation/Result/t3docsproject/*; do
+        if [ "$(ls -A RenderedDocumentation/Result/project/)" ]; then
+            for LOCALIZATIONDIR in RenderedDocumentation/Result/project/*; do
                     LOCALIZATION=`basename $LOCALIZATIONDIR`
                     echo "Handling localized documentation version ${LOCALIZATION:?Localization could not be determined}"
                     mkdir FinalDocumentation/${LOCALIZATION}
@@ -88,6 +91,7 @@ runs:
 
     - id: output
       shell: bash
+      working-directory: t3docsproject
       run: |
-        rmdir t3docsproject/RenderedDocumentation
+        rmdir RenderedDocumentation
         echo "::set-output name=renderedPath::t3docsproject/FinalDocumentation/"

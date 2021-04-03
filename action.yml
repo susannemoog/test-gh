@@ -56,4 +56,4 @@ runs:
     - id: output
       shell: bash
       run: |
-        echo "::set-output name=renderedPath::'./project/RenderedDocumentation/'"
+        echo "::set-output name=renderedPath::project/RenderedDocumentation/"

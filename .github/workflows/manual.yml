@@ -18,15 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     name: Render Documentation
     steps:
-      # until the action is published.
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Render Repository
+      - name: Render documentation
         uses: ./actions/render/
         id: rendering
         with:
-          repository_url: ${{ github.event.inputs.repository_url }} #https://github.com/FriendsOfTYPO3/openid.git
+          repository_url: ${{ github.event.inputs.repository_url }}
           source_branch: ${{ github.event.inputs.source_branch }}
           target_branch_directory: ${{ github.event.inputs.target_branch_directory }}
 

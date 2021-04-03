@@ -3,15 +3,13 @@ description: 'Use the up-to-date docker rendering workflow to render TYPO3 rst d
 inputs:
   repository_url:
     description: 'Repository to render'
-    required: true
+    required: false
     default: https://github.com/${{ github.repository }}.git
   source_branch:
     description: 'Branch to render'
-    default: 'main'
     required: false
   target_branch_directory:
     description: 'Target Branch Directory'
-    default: 'master'
     required: false
 outputs:
   renderedPath:
@@ -20,10 +18,26 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - id: prepare
+      shell: bash
+      env:
+        GITHUB_REF: ${{ github.ref }}
+      run: |
+        if ${${{ inputs.source_branch }}}; then
+          echo "::set-env name=source_branch::${{ inputs.source_branch }}"
+        else
+          echo "::set-env name=source_branch::${GITHUB_REF#refs/heads/}"
+        fi
+        if ${${{ inputs.target_branch_directory }}}; then
+          echo "::set-env name=target_branch_directory::${{ inputs.target_branch_directory }}"
+        else
+          echo "::set-env name=target_branch_directory::${GITHUB_REF#refs/heads/}"
+        fi
+
     - id: checkout
       shell: bash
       run: |
-        git clone --depth 1 ${{ inputs.repository_url }} -b ${{ inputs.source_branch }} t3docsproject
+        git clone --depth 1 ${{ inputs.repository_url }} -b ${{ env.source_branch }} t3docsproject
 
     - id: jobfile
       working-directory: t3docsproject
@@ -34,7 +48,7 @@ runs:
         {
             "Overrides_cfg": {
                 "general": {
-                    "release": "${{ inputs.target_branch_directory }}"
+                    "release": "${{ env.target_branch_directory }}"
                 },
                 "html_theme_options": {
                     "docstypo3org": "yes"

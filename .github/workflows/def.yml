@@ -1,0 +1,20 @@
+on:
+  push
+
+jobs:
+  hello_github:
+    runs-on: ubuntu-latest
+    name: Render Documentation
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Render documentation
+        uses: ./actions/render/
+        id: rendering
+
+      - name: Publish archive with result
+        uses: actions/upload-artifact@v1
+        with:
+          name: Rendered
+          path: ${{ steps.rendering.outputs.renderedPath }}

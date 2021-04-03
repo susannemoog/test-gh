@@ -47,7 +47,7 @@ runs:
       run: |
         mkdir -p t3docsproject/RenderedDocumentation
         docker run --rm --user=$(id -u):$(id -g) \
-          -v $(pwd)/t3docsproject:/t3docsproject:ro \
+          -v $(pwd)/t3docsproject:/project:ro \
           -v $(pwd)/t3docsproject/RenderedDocumentation:/RESULT \
           t3docs/render-documentation makehtml \
             -c make_singlehtml 1 \

@@ -12,3 +12,13 @@ jobs:
       - name: Hello world action step
         uses: ./
         id: hello
+        with:
+          repository_url: https://github.com/FriendsOfTYPO3/openid.git
+          source_branch: master
+          target_branch_directory: master
+
+      - name: Publish archive with result
+        uses: actions/upload-artifact@v1
+        with:
+          name: Rendered
+          path: ${{ steps.hello.outputs.renderedPath }}

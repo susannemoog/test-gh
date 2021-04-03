@@ -13,6 +13,10 @@ inputs:
     description: 'Target Branch Directory'
     default: 'master'
     required: false
+outputs:
+  renderedPath:
+    description: "Rendered Path"
+    value: ${{ steps.output.outputs.renderedPath }}
 runs:
   using: "composite"
   steps:
@@ -48,3 +52,8 @@ runs:
           t3docs/render-documentation makehtml \
             -c make_singlehtml 1 \
             -c "/ALL/Menu/mainmenu.sh makehtml -c replace_static_in_html 1 -c make_singlehtml 1 -c jobfile /PROJECT/jobfile.json"
+
+    - id: output
+      shell: bash
+      run: |
+        echo "::set-output name=renderedPath::'./project/RenderedDocumentation/'"

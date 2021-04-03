@@ -9,9 +9,9 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Hello world action step
-        uses: ./
-        id: hello
+      - name: Render Repository
+        uses: ./actions/render/
+        id: rendering
         with:
           repository_url: https://github.com/FriendsOfTYPO3/openid.git
           source_branch: master

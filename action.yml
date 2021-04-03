@@ -16,12 +16,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - id: Checkout
+    - id: checkout
       shell: bash
       run: |
         git clone --depth 1 ${{ inputs.repository_url }} -b ${{ inputs.source_branch }} project
 
-    - id: Jobfile Creation
+    - id: jobfile
       shell: bash
       run: |
         touch project/jobfile.json
@@ -38,7 +38,8 @@ runs:
         }
         EOF
 
-    - id: docker run
+    - id: render
+      shell: bash
       run: |
         mkdir -p project/RenderedDocumentation
         docker run --rm --user=$(id -u):$(id -g) \

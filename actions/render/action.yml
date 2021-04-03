@@ -67,7 +67,7 @@ runs:
         # if a result has been rendered for the main directory, we treat that as the 'en_us' version
         if [ -d RenderedDocumentation/Result/project/0.0.0/ ]; then
                 echo "Handling main doc result as en-us version"
-                mkdir FinalDocumentation/en-us
+                mkdir -p FinalDocumentation/en-us
                 # Move en-us files to target dir, including dot files
                 (shopt -s dotglob; mv RenderedDocumentation/Result/project/0.0.0/* FinalDocumentation/en-us)
                 # Remove the directory, all content has been moved

@@ -15,7 +15,7 @@ inputs:
     required: false
 outputs:
   renderedPath:
-    description: "Rendered Path"
+    description: "The path to the final rendered documentation incl. language versions."
     value: ${{ steps.output.outputs.renderedPath }}
 runs:
   using: "composite"

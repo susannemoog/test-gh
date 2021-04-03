@@ -1,0 +1,37 @@
+on:
+  workflow_dispatch:
+    inputs:
+      repository_url:
+        description: 'Repository URL'
+        required: true
+      source_branch:
+        description: 'Source Branch'
+        required: false
+        default: 'main'
+      target_branch_directory:
+        description: 'Target Branch Directory'
+        required: false
+        default: 'master'
+
+jobs:
+  hello_github:
+    runs-on: ubuntu-latest
+    name: Render Documentation
+    steps:
+      # until the action is published.
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Render Repository
+        uses: ./actions/render/
+        id: rendering
+        with:
+          repository_url: ${{ github.event.inputs.repository_url }} #https://github.com/FriendsOfTYPO3/openid.git
+          source_branch: ${{ github.event.inputs.source_branch }}
+          target_branch_directory: ${{ github.event.inputs.target_branch_directory }}
+
+      - name: Publish archive with result
+        uses: actions/upload-artifact@v1
+        with:
+          name: Rendered
+          path: ${{ steps.rendering.outputs.renderedPath }}

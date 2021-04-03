@@ -1,12 +1,13 @@
-on: [ push ]
+on:
+  repository_dispatch:
+    types: ['render']
 
 jobs:
   hello_github:
     runs-on: ubuntu-latest
-    name: Hello?
+    name: Render Documentation
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
+      # until the action is published.
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -14,9 +15,9 @@ jobs:
         uses: ./actions/render/
         id: rendering
         with:
-          repository_url: https://github.com/FriendsOfTYPO3/openid.git
-          source_branch: master
-          target_branch_directory: master
+          repository_url: ${{ github.event.client_payload.repository_url }}
+          source_branch: ${{ github.event.client_payload.source_branch }}
+          target_branch_directory: ${{ github.event.client_payload.target_branch_directory }}
 
       - name: Publish archive with result
         uses: actions/upload-artifact@v1

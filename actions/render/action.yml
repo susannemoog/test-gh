@@ -51,7 +51,7 @@ runs:
           -v $(pwd)/t3docsproject/RenderedDocumentation:/RESULT \
           t3docs/render-documentation makehtml \
             -c make_singlehtml 1 \
-            -c "/ALL/Menu/mainmenu.sh makehtml -c replace_static_in_html 1 -c make_singlehtml 1 -c jobfile /t3docsproject/jobfile.json"
+            -c "/ALL/Menu/mainmenu.sh makehtml -c replace_static_in_html 1 -c make_singlehtml 1 -c jobfile /project/jobfile.json"
 
 
     - id: langhandling

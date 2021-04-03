@@ -17,11 +17,9 @@ runs:
   using: "composite"
   steps:
     - id: Checkout
-      uses: actions/checkout@v2
-      with:
-        repository: ${{ inputs.repository_url }}
-        ref: ${{ inputs.source_branch }}
-        path: project
+      shell: bash
+      run: |
+        git clone --depth 1 ${{ inputs.repository_url }} -b ${{ inputs.source_branch }} project
 
     - id: Jobfile Creation
       shell: bash

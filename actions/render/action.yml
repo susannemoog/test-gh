@@ -23,12 +23,12 @@ runs:
       env:
         GITHUB_REF: ${{ github.ref }}
       run: |
-        if ${${{ inputs.source_branch }}}; then
+        if ${{ inputs.source_branch }}; then
           echo "::set-env name=source_branch::${{ inputs.source_branch }}"
         else
           echo "::set-env name=source_branch::${GITHUB_REF#refs/heads/}"
         fi
-        if ${${{ inputs.target_branch_directory }}}; then
+        if ${{ inputs.target_branch_directory }}; then
           echo "::set-env name=target_branch_directory::${{ inputs.target_branch_directory }}"
         else
           echo "::set-env name=target_branch_directory::${GITHUB_REF#refs/heads/}"

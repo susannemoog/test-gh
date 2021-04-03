@@ -7,11 +7,11 @@ inputs:
     default: https://github.com/${{ github.repository }}.git
   source_branch:
     description: 'Branch to render'
-    default: ${{ github.ref }}
+    default: 'main'
     required: false
   target_branch_directory:
     description: 'Target Branch Directory'
-    default: ${{ github.ref }}
+    default: 'master'
     required: false
 runs:
   using: "composite"

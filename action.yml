@@ -4,7 +4,7 @@ inputs:
   repository_url: # id of input
     description: 'Repository to render'
     required: true
-    default: ${{ github.repository }}
+    default: https://github.com/${{ github.repository }}.git
   source_branch:
     description: 'Branch to render'
     default: ${{ github.ref }}

@@ -8,9 +8,11 @@ inputs:
   source_branch:
     description: 'Branch to render'
     default: ${{ github.ref }}
+    required: false
   target_branch_directory:
     description: 'Target Branch Directory'
     default: ${{ github.ref }}
+    required: false
 runs:
   using: "composite"
   steps:

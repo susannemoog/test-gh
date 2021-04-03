@@ -24,14 +24,14 @@ runs:
         GITHUB_REF: ${{ github.ref }}
       run: |
         if [[ '${{ inputs.source_branch }}' ]]; then
-          echo "::set-env name=source_branch::${{ inputs.source_branch }}"
+          echo "source_branch=${{ inputs.source_branch }}" >> $GITHUB_ENV
         else
-          echo "::set-env name=source_branch::${GITHUB_REF#refs/heads/}"
+          echo "source_branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         fi
         if [[ '${{ inputs.target_branch_directory }}' ]]; then
-          echo "::set-env name=target_branch_directory::${{ inputs.target_branch_directory }}"
+          echo "target_branch_directory=${{ inputs.target_branch_directory }}" >> $GITHUB_ENV
         else
-          echo "::set-env name=target_branch_directory::${GITHUB_REF#refs/heads/}"
+          echo "target_branch_directory=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
         fi
 
     - id: checkout

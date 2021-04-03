@@ -1,0 +1,49 @@
+name: 'Hello Github'
+description: 'Render'
+inputs:
+  repository_url: # id of input
+    description: 'Repository to render'
+    required: true
+    default: ${{ github.repository }}
+  source_branch:
+    description: 'Branch to render'
+    default: ${{ github.ref }}
+  target_branch_directory:
+    description: 'Target Branch Directory'
+    default: ${{ github.ref }}
+runs:
+  using: "composite"
+  steps:
+    - id: Checkout
+      uses: actions/checkout@v2
+      with:
+        repository: ${{ inputs.repository_url }}
+        ref: ${{ inputs.source_branch }}
+        path: project
+
+    - id: Jobfile Creation
+      shell: bash
+      run: |
+        touch project/jobfile.json
+        cat << EOF > project/jobfile.json
+        {
+            "Overrides_cfg": {
+                "general": {
+                    "release": "${{ inputs.target_branch_directory }}"
+                },
+                "html_theme_options": {
+                    "docstypo3org": "yes"
+                }
+            }
+        }
+        EOF
+
+    - id: docker run
+      run: |
+        mkdir -p project/RenderedDocumentation
+        docker run --rm --user=$(id -u):$(id -g) \
+          -v $(pwd)/project:/PROJECT:ro \
+          -v $(pwd)/project/RenderedDocumentation:/RESULT \
+          t3docs/render-documentation makehtml \
+            -c make_singlehtml 1 \
+            -c "/ALL/Menu/mainmenu.sh makehtml -c replace_static_in_html 1 -c make_singlehtml 1 -c jobfile /PROJECT/jobfile.json"

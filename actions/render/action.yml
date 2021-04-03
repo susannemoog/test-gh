@@ -93,5 +93,5 @@ runs:
       shell: bash
       working-directory: t3docsproject
       run: |
-        rmdir -p RenderedDocumentation
+        rm -Rf RenderedDocumentation
         echo "::set-output name=renderedPath::t3docsproject/FinalDocumentation/"
